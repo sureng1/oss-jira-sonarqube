@@ -1,0 +1,19 @@
+version: '3'
+services:
+  jira:
+    image: atlassian/jira-software
+    ports:
+      - 8081:8080
+    volumes:
+      - /path/to/jira/data:/var/atlassian/application-data/jira
+    environment:
+      - JIRA_DATABASE_URL=postgresql://postgresuser:postgrespw@db:5432/jiradb
+      - JIRA_DB_PASSWORD=jirapass
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=postgrespw
+    volumes:
+      - /path/to/postgres/data:/var/lib/postgresql/data
