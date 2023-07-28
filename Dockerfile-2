@@ -1,0 +1,11 @@
+FROM jira-1
+
+
+RUN rm -f /opt/jira/atlassian-jira/WEB-INF/lib/atlassian-extras-3.4.6.jar && \
+    cp /tmp/atlassian-extras-3.4.6.jar /opt/jira/atlassian-jira/WEB-INF/lib && \
+    /opt/jira/bin/start-jira.sh && \
+    /opt/jira/bin/stop-jira.sh
+
+# Open ports    
+EXPOSE 8080
+CMD ["/opt/jira/bin/start-jira.sh"]

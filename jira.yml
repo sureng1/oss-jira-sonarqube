@@ -1,14 +1,15 @@
 version: '3'
 services:
   jira:
-    image: atlassian/jira-software
+    image: jira
     ports:
       - 8081:8080
-    volumes:
-      - /path/to/jira/data:/var/atlassian/application-data/jira
+    # volumes:
+    #   - /path/to/jira/data:/var/atlassian/application-data/jira
     environment:
       - JIRA_DATABASE_URL=postgresql://postgresuser:postgrespw@db:5432/jiradb
       - JIRA_DB_PASSWORD=jirapass
+    command: ["/bin/bash", "-c","tail -f /dev/null"]
 
   db:
     image: postgres
@@ -16,4 +17,17 @@ services:
       - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=postgrespw
     volumes:
-      - /path/to/postgres/data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    #  - KC_HOSTNAME=keycloak
+    # volumes:
+    #   - ./data:/opt/keycloak/data
+    #restart: always
+    command:
+     - start-dev
